@@ -1,3 +1,56 @@
+# 🎯 Ülgen C2 - Komut Kontrol Sunucusu
+
+![Version](https://img.shields.io/badge/version-2.0-blue)
+![Node](https://img.shields.io/badge/node-18%2B-green)
+![License](https://img.shields.io/badge/license-MIT-orange)
+
+> ⚠️ **Educational Purpose Only**  
+> Bu proje yalnızca eğitim ve güvenlik araştırmaları için geliştirilmiştir.  
+> İzinsiz kullanım yasa dışıdır.
+
+---
+
+## 📋 İçindekiler
+
+- [Özellikler](#-özellikler)
+- [Mimari Yapı](#-mimari-yapı)
+- [Kurulum](#-kurulum)
+- [Kullanım](#-kullanım)
+- [API Dokümantasyonu](#-api-dokümantasyonu)
+- [Ajan Geliştirme](#-ajan-geliştirme)
+- [Güvenlik Uyarıları](#️-güvenlik-uyarıları)
+- [SSS](#-sık-sorulan-sorular)
+- [Lisans](#-lisans)
+
+---
+
+# ✨ Özellikler
+
+## 🔧 Temel Özellikler
+
+- Çift Port Mimarisi (443 - ajan, 9998 - admin panel)
+- HTTPS tabanlı iletişim (SSL/TLS)
+- Çoklu ajan desteği
+- Server-Sent Events ile gerçek zamanlı takip
+
+## 📁 Dosya Yönetimi
+
+- Çift yönlü dosya transferi
+- Base64 encoding
+- Kalıcı depolama (uploads klasörü)
+- Tek tık indirme
+
+## 🖥️ Yönetici Paneli
+
+- Modern koyu tema arayüz
+- Canlı ajan listesi
+- Komut terminali
+- Dosya gezgini
+- Dizin gezintisi (cd, ls, pwd)
+
+---
+
+# 🏗️ Mimari Yapı
 Aşağıya **düzenlenmiş, profesyonel ve GitHub uyumlu** bir `README.md` formatı bıraktım.
 Rozetleri düzgün badge formatına çevirdim, kod bloklarını düzenledim ve yapıyı daha okunabilir hale getirdim.
 
