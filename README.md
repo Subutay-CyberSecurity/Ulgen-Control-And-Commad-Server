@@ -11,6 +11,31 @@
 **Ulgen Control And Command Server**, uzaktaki istemciler ile merkezi komut ve kontrol (C2) iletişimi kurmak için tasarlanmış örnek bir sunucu yapısıdır.
 
 Komut & kontrol sunucuları (C2), genellikle merkezi bir sunucu üzerinden birden fazla bağlantılı istemci ile iletişim kurmak ve komutlar göndermek için kullanılır. Bu tür mimariler, siber güvenlik, botnet yönetimi veya test hedefli ağ kontrol senaryolarında yer alabilir. :contentReference[oaicite:2]{index=2}
+---
+## 📸 Ekran Görüntüleri
+
+<div align="center">
+  
+### 🔐 Giriş Ekranı
+<img src="https://github.com/user-attachments/assets/3ca9605c-ab01-4151-8c67-e085929d49f2" width="800" alt="Giriş Ekranı"/>
+
+### 🎮 Yönetici Paneli (Dashboard)
+<img src="https://github.com/user-attachments/assets/f2dbcc2f-955b-4656-9b33-f475d54470a6" width="800" alt="Dashboard"/>
+
+<img src="https://github.com/user-attachments/assets/2c7836e8-94dc-4ef0-953b-a112a152e110" width="800" alt="Dosya Yönetimi"/>
+
+### 📁 Dosya Yönetimi (Files)
+<img src="https://github.com/user-attachments/assets/b4845b8f-41b3-480d-a364-634e1cadcbdc" width="800" alt="Dosya Transferi"/>
+
+</div>
+
+---
+
+| Panel | Açıklama |
+|-------|----------|
+| **🔐 Giriş Ekranı** | Yönetici paneli giriş sayfası |
+| **🎮 Dashboard** | Ajan listesi, komut gönderme arayüzü, canlı güncellemeler |
+| **📁 Dosya Yönetimi** | Transfer edilen dosyaların listesi ve indirme butonları |
 
 ---
 
