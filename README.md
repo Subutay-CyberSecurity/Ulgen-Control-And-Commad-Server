@@ -14,6 +14,14 @@ Komut & kontrol sunucuları (C2), genellikle merkezi bir sunucu üzerinden birde
 
 ---
 
+## ⚖️ Sorumluluk Reddi
+
+Bu yazılım **sadece eğitim amaçlıdır**. İzin alınmış sistemlerde test yapmak için tasarlanmıştır. Kötüye kullanımı yasal sorumluluk doğurur. Geliştiriciler, bu yazılımın yasa dışı kullanımından sorumlu tutulamaz.
+
+**Kullanmadan önce yerel yasalarınızı kontrol edin.**
+
+---
+
 ## 🗂️ Özellikler
 
 - Basit TCP/HTTP tabanlı sunucu mimarisi
