@@ -212,3 +212,17 @@ sudo ufw status verbose
 - **Güncelleme yaparken:** Kodları güncellediğinde PM2'yi restart et:
   ```bash
   pm2 restart c2-server
+  ```
+
+  ## 🚨 Sorun Giderme
+
+| Sorun | Çözüm |
+|-------|-------|
+| **EACCES hatası** | Port 443 için root yetkisi gerekir: `sudo pm2 start server.js --name c2-server` |
+| **SSL sertifika hatası** | Sertifikaların doğru yerde olduğunu kontrol et: `ls -la ~/c2-server/certs/` |
+| **Bağlantı reddediliyor** | Güvenlik duvarında portların açık olduğunu kontrol et: `sudo ufw status` |
+| **Ajan bağlanamıyor** | Self-signed sertifika için `verify=False` kullanıldığından emin ol |
+
+---
+
+Artık C2 sunucun 7/24 çalışır durumda! Yönetici paneline girip ajanlarını yönetebilir, komut gönderebilir ve dosya transferi yapabilirsin. 🚀
