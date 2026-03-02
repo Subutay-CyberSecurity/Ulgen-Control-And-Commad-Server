@@ -57,6 +57,7 @@ https://img.shields.io/badge/license-MIT-orange
     Dizin Gezintisi: cd, ls, pwd komutları ile ajanın dosya sisteminde gezinme
 
 🏗️ Mimari Yapı
+
 text
 
 ┌─────────────────┐     443      ┌──────────────┐
@@ -68,6 +69,7 @@ text
                                    │ Yönetici  │
                                    │  Paneli   │
                                    └───────────┘
+                                   
 
 Port Yapısı
 Port	Kullanım	Açıklama
@@ -75,6 +77,7 @@ Port	Kullanım	Açıklama
 9998	Yönetici Paneli	Web arayüzü, ajan yönetimi ve dosya transferi
 Klasör Yapısı
 text
+
 
 c2-server/
 ├── 📁 certs/                 # SSL sertifikaları
@@ -87,6 +90,7 @@ c2-server/
 ├── 📄 server.js                # Ana sunucu kodu
 ├── 📄 package.json
 └── 📄 README.md
+
 
 🚀 Kurulum
 Gereksinimler
