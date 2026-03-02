@@ -50,20 +50,6 @@
 - Dosya gezgini
 - Dizin gezintisi (cd, ls, pwd)
 
----
-
-# 🏗️ Mimari Yapı
-┌─────────────────┐ 443 ┌──────────────┐
-│ Ajanlar │ ◄─────────── │ C2 Sunucu │
-│ (Client) │ │ (Node.js) │
-└─────────────────┘ └──────┬───────┘
-│ 9998
-┌────▼──────┐
-│ Admin │
-│ Panel │
-└───────────┘
-
-
 ## Port Yapısı
 
 | Port | Amaç | Açıklama |
