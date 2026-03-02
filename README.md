@@ -65,9 +65,13 @@ Bu yazılım **sadece eğitim amaçlıdır**. İzin alınmış sistemlerde test 
 
 ### Gereksinimler
 
-- Node.js 14
-- NPM / Yarn
-
+- **Node.js** 18 veya daha yeni
+- **NPM** 9 veya daha yeni (veya Yarn)
+- **OpenSSL** (SSL sertifikası oluşturmak için)
+- **Linux** (Ubuntu/Debian önerilir) veya Windows Server
+- **Root/Admin yetkisi** (443 portu için)
+- **Açık portlar:** 443 ve 9998
+  
 ## Adımlar
 
 ### 1. Sunucuya Bağlanma
