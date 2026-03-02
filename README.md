@@ -1,3 +1,265 @@
+Aşağıya **düzenlenmiş, profesyonel ve GitHub uyumlu** bir `README.md` formatı bıraktım.
+Rozetleri düzgün badge formatına çevirdim, kod bloklarını düzenledim ve yapıyı daha okunabilir hale getirdim.
+
+Bunu direkt `README.md` olarak koyabilirsin 👇
+
+---
+
+```md
+# 🎯 Ülgen C2 - Komut Kontrol Sunucusu
+
+![Version](https://img.shields.io/badge/version-2.0-blue)
+![Node](https://img.shields.io/badge/node-18%2B-green)
+![License](https://img.shields.io/badge/license-MIT-orange)
+
+> ⚠️ **Educational Purpose Only**  
+> Bu proje yalnızca eğitim ve güvenlik araştırmaları için geliştirilmiştir.  
+> İzinsiz kullanım yasa dışıdır.
+
+---
+
+## 📋 İçindekiler
+
+- [Özellikler](#-özellikler)
+- [Mimari Yapı](#-mimari-yapı)
+- [Kurulum](#-kurulum)
+- [Kullanım](#-kullanım)
+- [API Dokümantasyonu](#-api-dokümantasyonu)
+- [Ajan Geliştirme](#-ajan-geliştirme)
+- [Güvenlik Uyarıları](#️-güvenlik-uyarıları)
+- [SSS](#-sık-sorulan-sorular)
+- [Lisans](#-lisans)
+
+---
+
+# ✨ Özellikler
+
+## 🔧 Temel Özellikler
+
+- Çift Port Mimarisi (443 - ajan, 9998 - admin panel)
+- HTTPS tabanlı iletişim (SSL/TLS)
+- Çoklu ajan desteği
+- Server-Sent Events ile gerçek zamanlı takip
+
+## 📁 Dosya Yönetimi
+
+- Çift yönlü dosya transferi
+- Base64 encoding
+- Kalıcı depolama (uploads klasörü)
+- Tek tık indirme
+
+## 🖥️ Yönetici Paneli
+
+- Modern koyu tema arayüz
+- Canlı ajan listesi
+- Komut terminali
+- Dosya gezgini
+- Dizin gezintisi (cd, ls, pwd)
+
+---
+
+# 🏗️ Mimari Yapı
+
+```
+
+┌─────────────────┐     443      ┌──────────────┐
+│     Ajanlar     │ ◄─────────── │   C2 Sunucu  │
+│  (Client)       │              │  (Node.js)   │
+└─────────────────┘              └──────┬───────┘
+│ 9998
+┌────▼──────┐
+│ Yönetici  │
+│  Paneli   │
+└───────────┘
+
+````
+
+## Port Yapısı
+
+| Port | Kullanım | Açıklama |
+|------|----------|----------|
+| 443  | Ajan API | Komut ve veri transferi |
+| 9998 | Admin    | Web panel erişimi |
+
+---
+
+# 🚀 Kurulum
+
+## Gereksinimler
+
+- Node.js 18+
+- npm veya yarn
+- OpenSSL
+- 443 portu için sudo yetkisi
+
+## Kurulum Adımları
+
+```bash
+git clone https://github.com/Subutay-CyberSecurity/Ulgen-Control-And-Commad-Server.git
+cd Ulgen-Control-And-Commad-Server
+npm install
+````
+
+### SSL Sertifikası Oluşturma
+
+```bash
+mkdir certs
+cd certs
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
+cd ..
+```
+
+### Sunucuyu Başlatma
+
+```bash
+mkdir uploads downloads
+sudo node server.js
+```
+
+---
+
+# 🐳 Docker ile Kurulum
+
+```dockerfile
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 443 9998
+CMD ["node", "server.js"]
+```
+
+```bash
+docker build -t ulgen-c2 .
+docker run -p 443:443 -p 9998:9998 -v $(pwd)/uploads:/app/uploads ulgen-c2
+```
+
+---
+
+# 🎮 Kullanım
+
+Admin Panel:
+
+```
+https://<sunucu_ip>:9998
+```
+
+Varsayılan şifreyi değiştirmeniz önerilir.
+
+---
+
+# 📡 API Dokümantasyonu
+
+## Ajan Kaydı
+
+```http
+POST /api/game/register
+```
+
+## Komut Kontrolü
+
+```http
+GET /api/game/status/{agentId}
+```
+
+## Komut Çıktısı Gönderme
+
+```http
+POST /api/game/data
+```
+
+## Dosya Yükleme
+
+```http
+POST /api/agent/upload
+```
+
+## Dosya İndirme
+
+```http
+GET /api/files/{fileId}/download
+```
+
+---
+
+# 🐍 Ajan Geliştirme (Örnek - Python)
+
+```python
+# Basitleştirilmiş örnek
+import requests
+import time
+
+SERVER = "https://SERVER_IP:443"
+agent_id = "agent_123"
+
+requests.post(f"{SERVER}/api/game/register",
+              json={"playerId": agent_id},
+              verify=False)
+
+while True:
+    r = requests.get(f"{SERVER}/api/game/status/{agent_id}",
+                     verify=False)
+    print(r.json())
+    time.sleep(3)
+```
+
+---
+
+# ⚠️ Güvenlik Uyarıları
+
+* Sadece lab ortamında kullanın
+* İzinsiz sistemlerde test etmeyin
+* Varsayılan şifreyi değiştirin
+* SSL private key’i koruyun
+* Rate limiting ekleyin
+* Firewall konfigürasyonu yapın
+
+---
+
+# ❓ Sık Sorulan Sorular
+
+### EACCES hatası alıyorum
+
+443 portu için root gerekir:
+
+```bash
+sudo node server.js
+```
+
+### SSL hatası alıyorum
+
+Self-signed sertifika kullanıyorsanız istemci tarafında doğrulamayı kapatmanız gerekir (sadece test ortamında).
+
+---
+
+# 🤝 Katkıda Bulunma
+
+1. Fork
+2. Feature branch oluştur
+3. Commit
+4. Push
+5. Pull Request
+
+---
+
+# 📜 Lisans
+
+MIT License
+
+```
+
+---
+
+İstersen bir üst seviye versiyon da yapabiliriz:
+
+- MITRE ATT&CK mapping
+- Blue Team detection bölümü
+- Threat model diyagramı
+- CV için daha “research oriented” versiyon
+
+Onu yaparsak repo çok daha profesyonel görünür 👀
+```
 🎯 Ülgen C2 - Komut Kontrol Sunucusu
 
 https://img.shields.io/badge/version-2.0-blue
