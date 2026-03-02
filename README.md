@@ -11,7 +11,9 @@
 **Ulgen Control And Command Server**, uzaktaki istemciler ile merkezi komut ve kontrol (C2) iletişimi kurmak için tasarlanmış örnek bir sunucu yapısıdır.
 
 Komut & kontrol sunucuları (C2), genellikle merkezi bir sunucu üzerinden birden fazla bağlantılı istemci ile iletişim kurmak ve komutlar göndermek için kullanılır. Bu tür mimariler, siber güvenlik, botnet yönetimi veya test hedefli ağ kontrol senaryolarında yer alabilir. :contentReference[oaicite:2]{index=2}
+
 ---
+
 ## 📸 Ekran Görüntüleri
 
 <div align="center">
