@@ -193,5 +193,22 @@ sudo ufw allow 9998/tcp       # Yönetici Paneli
 sudo ufw --force enable
 
 # Durumu kontrol et
-sudo ufw status verbose```
+sudo ufw status verbose
+```
 
+## 🎯 Kurulum Sonrası Erişim
+
+| Servis | Adres | Açıklama |
+|--------|-------|----------|
+| **Yönetici Paneli** | `https://sunucu_ip_adresin:9998` | Şifre: `mow0BEBWgooxBLCiAVTm` |
+| **Ajan API** | `https://sunucu_ip_adresin:443` | Ajanların bağlanacağı adres |
+| **Test Endpoint** | `https://sunucu_ip_adresin:443/test` | JSON yanıtı döner |
+
+## ⚠️ ÖNEMLİ NOTLAR
+
+- **Varsayılan şifreyi değiştir!** `server.js` dosyasındaki `PASSWORD` sabitini kendi güçlü şifrenle değiştir.
+- **443 portu root yetkisi ister:** PM2 ile root yetkisiyle çalıştırdığın için sorun olmaz.
+- **Dosyalar kalıcı mı?** Evet, `uploads/` klasöründeki dosyalar sunucu restartında kaybolmaz. Sistem her başladığında `uploads/` klasörünü tarar ve dosyaları listeler.
+- **Güncelleme yaparken:** Kodları güncellediğinde PM2'yi restart et:
+  ```bash
+  pm2 restart c2-server
