@@ -131,7 +131,8 @@ cd ~/c2-server
 npm install
 
 # Test için çalıştır (root yetkisi gerekebilir)
-sudo node server.js```
+sudo node server.js
+```
 
 <p>Eğer her şey yolundaysa şu çıktıyı görmelisin:</p>
 
