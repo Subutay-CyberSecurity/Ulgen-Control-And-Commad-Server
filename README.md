@@ -126,21 +126,11 @@ cd ~/c2-server
 mkdir -p certs public uploads downloads
 ```
 
-<p>Şimdi, kendi bilgisayarından aşağıdaki dosyaları VPS'ine yüklemen gerekiyor. Bunun için scp komutunu kullanabilirsin (kendi bilgisayarının terminalinde çalıştır).</p>
-
 ```bash
-# Kendi bilgisayarından VPS'ine dosya yükleme
-scp -r /kendi_bilgisayarindaki/c2-server/server.js root@sunucu_ip_adresin:~/c2-server/
-scp -r /kendi_bilgisayarindaki/c2-server/package.json root@sunucu_ip_adresin:~/c2-server/
-scp -r /kendi_bilgisayarindaki/c2-server/public root@sunucu_ip_adresin:~/c2-server/
+# GitHub'dan clone
+git clone https://github.com/Subutay-CyberSecurity/Ulgen-Control-And-Commad-Server ~/c2-server
+cd ~/c2-server
 ```
-
-<p>Eğer dosyalar GitHub'daysa, VPS üzerinden direkt klonlamak daha kolay</p>
-
-```bash
-# GitHub'dan clone (kendi repo adresinle değiştir)
-git clone https://github.com/Subutay-CyberSecurity/Ulgen-Control-And-Commad-Server.git ~/c2-server
-cd ~/c2-server```
 
 ### 5. SSL Sertifikası Oluşturma
 
